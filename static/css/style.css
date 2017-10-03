@@ -97,3 +97,9 @@ td.empty {
 .logo-image {
 	padding-right: 20px;
 }
+
+@media screen and (max-width: 500px) {
+    .logo-skaut {
+		display: none;
+	}
+}
