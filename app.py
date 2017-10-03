@@ -1,8 +1,12 @@
+import os
 import time
 import logging
 
 from flask import Flask
 from flask import redirect
+from flask import render_template
+from flask import send_from_directory
+
 from colorlog import ColoredFormatter
 
 
@@ -25,6 +29,7 @@ def setup_handler(handler, level, fmt, use_colors=False):
         handler.setFormatter(logging.Formatter(fmt))
     return handler
 
+
 def setup_logging():
     logging.Formatter.converter = time.gmtime
 
@@ -35,7 +40,6 @@ def setup_logging():
     consoleHandler = setup_handler(
         logging.StreamHandler(), logging.INFO, consoleFormat, use_colors=True)
     rootLogger.addHandler(consoleHandler)
-
 
 
 # create logger
@@ -49,12 +53,43 @@ app.config.from_pyfile('config.py')
 
 @app.route('/')
 def main():
-	return redirect("/root")
+    return redirect(app.config['FILE_ROOT'])
+
 
 @app.route('/<path:path>')
 def routing(path):
-    return 'You want path: %s' % path
+    # remove trailing slashes
+    path = path.rstrip('/')
 
+    # given path does not exists
+    if not os.path.exists(path):
+        return "This path does not exists: {}".format(path), 404
+
+    # check for simple path traversal attack
+    if not app.config['FILE_ROOT'] in path:
+        return "You are browsing wrong directory: {}".format(path), 404
+
+    # given path is directory
+    if os.path.isdir(path):
+        listing = os.listdir(path)
+        _dirs = [d for d in listing if os.path.isdir(os.path.join(path, d))]
+        _files = [f for f in listing if os.path.isfile(os.path.join(path, f))]
+        _back = path.rsplit('/', 1)[0] if (path != app.config['FILE_ROOT']) else None
+
+        return render_template(
+            'filemanager.html',
+            dirs=_dirs,
+            files=_files,
+            back=_back,
+            path=path,
+            server=app.config['SERVER_ADDRESS'])
+
+    # given path is file
+    if os.path.isfile(path):
+        _dir, _file = path.rsplit('/', 1)
+        return send_from_directory(directory=_dir, filename=_file)
+
+    return "Internal server error", 500
 
 
 if __name__ == "__main__":
