@@ -1,0 +1,31 @@
+# Complete server configuration list
+
+# dhcp server
+sudo apt-get install isc-dhcp-server
+
+# important files for dhcp configuration
+/etc/default/isc-dhcp-server
+/etc/dhcp/dhcpd.conf
+
+# /etc/network/interfaces must have static ip address
+# for eth0 interface to start the dhcp server
+
+# service itself
+sudo service isc-dhcp-server status
+
+
+# dns server:
+sudo apt-get install bind9 bind9utils
+
+# important files for dns configuration
+subl /etc/bind/named.conf.local
+
+# zone files
+subl /etc/bind/for.jasan.lan
+subl /etc/bind/rev.jasan.lan
+
+# website for dns settings
+https://www.ostechnix.com/install-and-configure-dns-server-ubuntu-16-04-lts/
+
+# server must be started with root privileges and virtualenv enabled
+# to change to root shell enter sudo -s and root password

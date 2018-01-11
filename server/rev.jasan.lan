@@ -1,0 +1,12 @@
+$TTL 86400
+@   IN  SOA     pri.jasan.lan. root.jasan.lan. (
+        2011071002  ;Serial
+        3600        ;Refresh
+        1800        ;Retry
+        604800      ;Expire
+        86400       ;Minimum TTL
+)
+@       IN  NS          pri.jasan.lan.
+@       IN  PTR         jasan.lan.
+pri     IN  A           172.16.0.1
+1       IN  PTR         pri.jasan.lan.
