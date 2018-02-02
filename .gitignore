@@ -1,2 +1,4 @@
 __venv__/
-Jasan/
+__pycache__/
+journal/
+*.pyc

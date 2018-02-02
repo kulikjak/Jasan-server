@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Zápisník | Jasan</title>
+    <title>Intranet | Jasan</title>
 
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
@@ -23,28 +23,38 @@
             <img class="logo-image logo-skaut" src="/static/img/skaut-min.png" height="40px">
             <a href="/"><img class="logo-image logo-jasan" src="/static/img/jasan-min.png" height="50px"></a>
           </div>
-          <h3 class="box-title">Jasan File Manager</h3><br>
-          <div id="breadcrumb"><div>{{path}}</div></div>
+          <h1 class="box-title">VLK Jasan Intranet</h1><br>
         </div>
         <!-- /.box-header -->
-        <div class="box-body table-responsive no-padding">
-          <table class="table table-hover" id="table">
-            <tbody id="list">
-              {% if back %}
-              <tr><td class="back"><a class="name" href="{{ server }}{{ back }}">Zpět</a></td></tr>
-              {% endif %}
+      </div>
 
-              {% for file in files %}
-                <tr><td><a class="name" href="{{ server }}{{ path }}/{{ file }}">{{ file }}</a></td></tr>
-              {% endfor %}
-
-              {% for dir in dirs %}
-                <tr class="is_dir"><td class="first"><a class="name" href="{{ server }}{{ path }}/{{ dir }}">{{ dir }}</a></td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
+      <div class="tiles row">
+        <div class="col-md-4 col-sm-6">
+          <a href="/journal">
+            <div class="tile box">
+              <img class="tile-image" src="/static/img/Catalog-icon.png">
+              <p>Zápisník</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="/voting">
+            <div class="tile box">
+              <img class="tile-image" src="/static/img/Bulb-icon.png">
+              <p>Zpětná vazba</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="/skautis">
+            <div class="tile box">
+              <img class="tile-image" src="/static/img/Man-icon.png">
+              <p>SkautIS</p>
+            </div>
+          </a>
         </div>
       </div>
+
   </div><!-- /content -->
 </div> <!-- /container -->
 </body>
