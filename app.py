@@ -64,12 +64,20 @@ def home():
     return flask.render_template('home.html')
 
 
-@app.route('/voting')
-def voting():
-    polls = flask.g.model.polls.find()
-    active_polls = [p for p in polls if p.is_public()]
+@app.route('/feedback', methods=['GET', 'POST'])
+def feedback():
+    if flask.request.method == 'GET':
+        return flask.render_template('feedback.html')
 
-    return flask.render_template('voting.html', polls=active_polls)
+    elif flask.request.method == 'POST':
+        data = {
+            'title': flask.request.form['feedback_title'],
+            'text': flask.request.form['feedback_text']
+        }
+        flask.g.model.feedbacks.create_feedback(data)
+        flask.flash('Děkujeme za zpětnou vazbu')
+
+        return flask.redirect(flask.url_for('feedback'))
 
 
 @app.route('/skautis')
@@ -104,68 +112,8 @@ def logout():
 @app.route('/admin')
 @login_required
 def admin():
-    polls = flask.g.model.polls.find()
-    responses = flask.g.model.responses.find()
-
-    for poll in polls:
-        poll.extract_responses(responses)
-
-    return flask.render_template('admin.html', polls=polls)
-
-
-@app.route('/polls/new', methods=['POST'])
-@login_required
-def newpoll():
-    data = {
-        'title': flask.request.form['poll_title'],
-        'public': bool(int(flask.request.form['poll_public']))
-    }
-    flask.g.model.polls.create_poll(data)
-    return flask.redirect(flask.url_for('admin'))
-
-
-@app.route('/polls/edit', methods=['POST'])
-@login_required
-def editpoll():
-    poll_id = flask.request.form['poll_id']
-    poll = flask.g.model.polls.find_one(poll_id=poll_id)
-
-    data = {
-        'title': flask.request.form['poll_title'],
-        'public': bool(int(flask.request.form['poll_public']))
-    }
-
-    poll.set_data(data)
-    flask.g.model.polls.save(poll)
-    return flask.redirect(flask.url_for('admin'))
-
-
-@app.route('/polls/delete', methods=['POST'])
-@login_required
-def deletepoll():
-    poll_id = flask.request.form['poll_id']
-    poll = flask.g.model.polls.find_one(poll_id=poll_id)
-
-    flask.g.model.polls.delete(poll)
-    return flask.redirect(flask.url_for('admin'))
-
-
-@app.route('/polls/vote', methods=['POST'])
-def pollvote():
-    poll_id = flask.request.form['poll_id']
-
-    poll = flask.g.model.polls.find_one(poll_id=poll_id)
-
-    data = {
-        'poll_id': poll_id,
-        'value': flask.request.form['poll_vote'],
-        'text': flask.request.form['poll_text']
-    }
-
-    flask.g.model.responses.create_response(data)
-    flask.flash('Děkujeme za zpětnou vazbu')
-
-    return flask.redirect(flask.url_for('voting'))
+    feedbacks = flask.g.model.feedbacks.find()
+    return flask.render_template('admin.html', feedbacks=feedbacks)
 
 
 @app.route('/journal', defaults={'path': ''})

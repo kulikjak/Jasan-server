@@ -6,6 +6,19 @@ h2 {
     font-size: 18px;
 }
 
+.feedbacks h3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+.feedbacks p {
+    font-size: 12px;
+}
+.feedbacks footer {
+    text-align: right;
+    font-size: 10px;
+}
+
+
 .poll h3 {
     font-size: 16px;
     line-height: 32px;
@@ -34,7 +47,6 @@ body {
 .box-header h3.box-title {
     line-height: 1;
 }
-
 .box {
     max-width: 1000px;
     margin: 0 auto;
@@ -157,10 +169,10 @@ img.tile-image {
     margin: 10px;
 }
 
-.poll {
+.feedback {
     padding: 10px;
-    background: #f3f3f3;
 }
-.poll-public {
-    background: #ffffc8;   
+
+.alert {
+    font-size: 14px;
 }

@@ -1,0 +1,113 @@
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Admin | Jasan</title>
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <link rel="shortcut icon" type="image/ico" href="static/img/favicon.ico"/>
+</head>
+<body>
+
+<div class="container">
+  <div id="content">
+      <div class="box">
+        <div class="box-header">
+          <div id="logos">
+            <img class="logo-image logo-skaut" src="/static/img/skaut-min.png" height="40px">
+            <a href="/"><img class="logo-image logo-jasan" src="/static/img/jasan-min.png" height="50px"></a>
+          </div>
+          <h1 class="box-title">Jasan Admin</h1><br>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+          <button type="submit" class="btn btn-warning btn-logout" onclick="location.href='logout';">Odhlásit se</button>
+          <div class="box-inner">
+
+            <h2>Anketa / Zpětná vazba</h2>
+            <hr>        
+
+            {% for poll in polls %}
+              <div class="poll {% if poll.is_public() %} poll-public {% endif %}">
+                <h3>{{ poll.get_title() }}
+                  <div class="float-right">
+                    <button type="submit" class="btn btn-primary" onclick="toggleSection('poll-edit-{{ poll.get_id() }}');">Editovat</button>
+                    <button type="submit" class="btn btn-success" onclick="toggleSection('poll-results-{{ poll.get_id() }}');">Výsledky</button>
+                  </div>
+                </h3>
+                <table class="poll-results table" id="poll-results-{{ poll.get_id() }}" style="display: none">
+                  <tbody id="list">
+                    {% for response in poll._responses %}
+                      <tr><td>{{ response.get_value() }}</td><td>{{ response.get_text() }}</td></tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <div class="poll-edit" id="poll-edit-{{ poll.get_id() }}" style="display: none">
+                  <form action="/polls/edit" method="post">
+                    <div class="form-group">
+                      <label for="name">Název</label>
+                      <input type="name" class="form-control" id="name" name="poll_title" value="{{ poll.get_title() }}">
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="poll_public" id="Radio1" value="1" {% if poll.is_public() %} checked {% endif %}>
+                      <label class="form-check-label" for="Radio1">True</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="poll_public" id="Radio2" value="0" {% if not poll.is_public() %} checked {% endif %}>
+                      <label class="form-check-label" for="Radio2">False</label>
+                    </div>
+                    <input type="hidden" name="poll_id" value="{{ poll.get_id() }}">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                  <form action="/polls/delete" method="post">
+                    <input type="hidden" name="poll_id" value="{{ poll.get_id() }}">
+                    <button type="submit" class="btn btn-warning">Smazat</button>
+                  </form>
+                </div>
+              </div>
+              <hr>
+
+            {% endfor %}
+
+            <h3>Přidat novou anketu</h3>
+            <form action="/polls/new" method="post">
+              <div class="form-group">
+                <label for="name">Název</label>
+                <input type="name" class="form-control" id="name" name="poll_title">
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="poll_public" id="Radio1" value="1" checked>
+                <label class="form-check-label" for="Radio1">True</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="poll_public" id="Radio2" value="0">
+                <label class="form-check-label" for="Radio2">False</label>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+  </div><!-- /content -->
+</div> <!-- /container -->
+</body>
+
+<script type="text/javascript">
+  
+function toggleSection(idx) {
+  var elem = document.getElementById(idx);
+  if (elem.style.display == 'none')
+    elem.style.display = '';
+  else
+    elem.style.display = 'none';
+}
+
+</script>
+
+</html>
