@@ -191,10 +191,6 @@ def routing(path):
     if not os.path.exists(path):
         return "This path does not exists: {}".format(path), 404
 
-    # check for simple path traversal attack
-    #if not app.config['FILE_ROOT'] in path:
-    #    return "You are browsing wrong directory: {}".format(path), 404
-
     # given path is directory
     if os.path.isdir(path):
         listing = os.listdir(path)
