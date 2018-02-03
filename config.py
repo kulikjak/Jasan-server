@@ -13,4 +13,4 @@ MONGODB_URI = getenv('JASAN_MONGODB_URI', 'mongodb://localhost:27017/jasan')
 
 ADMIN_PASSWORD = getenv('JASAN_PASSWORD', 'S3cr3tPa55w0rd')
 
-FILE_ROOT = 'zapisnik'
+FILE_ROOT = 'journal'

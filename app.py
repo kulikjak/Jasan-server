@@ -200,7 +200,7 @@ def routing(path):
         listing = os.listdir(path)
         _dirs = [d for d in listing if os.path.isdir(os.path.join(path, d))]
         _files = [f for f in listing if os.path.isfile(os.path.join(path, f))]
-        _back = path.rsplit('/', 1)[0] if (path != 'journal') else None
+        _back = path.rsplit('/', 1)[0] if (path != app.config['FILE_ROOT']) else None
 
         return flask.render_template(
             'filemanager.html',
