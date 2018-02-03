@@ -29,27 +29,41 @@
         <div class="box-body table-responsive no-padding">
           <div class="box-inner">
 
-            {% for poll in polls %}
-              <div class="poll">
-                <h3>{{ poll.get_title() }}</h3>
-                <form action="/polls/vote" method="post">
-                  <div class="form-check">
-                    1 <input type="radio" name="poll_vote" value="1">
-                    2 <input type="radio" name="poll_vote" value="2">
-                    3 <input type="radio" name="poll_vote" value="3">
-                    4 <input type="radio" name="poll_vote" value="4">
-                    5 <input type="radio" name="poll_vote" value="5">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-success alert-dismissable">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Úspěch!</strong> {{ message }}
                   </div>
-                  <div class="form-group">
-                    <input type="name" class="form-control" name="poll_text" placeholder="Další slovní zpětná vazba">
-                  </div>
-                  <input type="hidden" name="poll_id" value="{{ poll.get_id() }}">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-              </div>
-              <hr>
-            {% endfor %}
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
 
+            {% if not polls %}
+              <p>Není na co dávat zpětnou vazbu...</p>
+            {% else %}
+              {% for poll in polls %}
+                <div class="poll">
+                  <h3>{{ poll.get_title() }}</h3>
+                  <form action="/polls/vote" method="post">
+                    <div class="form-check">
+                      1 <input type="radio" name="poll_vote" value="1">
+                      2 <input type="radio" name="poll_vote" value="2">
+                      3 <input type="radio" name="poll_vote" value="3">
+                      4 <input type="radio" name="poll_vote" value="4">
+                      5 <input type="radio" name="poll_vote" value="5">
+                    </div>
+                    <div class="form-group">
+                      <input type="name" class="form-control" name="poll_text" placeholder="Další slovní zpětná vazba">
+                    </div>
+                    <input type="hidden" name="poll_id" value="{{ poll.get_id() }}">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+                <hr>
+              {% endfor %}
+            {% endif %}
           </div>
         </div>
       </div>

@@ -64,25 +64,12 @@ def home():
     return flask.render_template('home.html')
 
 
-@app.route('/voting', methods=['GET', 'POST'])
+@app.route('/voting')
 def voting():
     polls = flask.g.model.polls.find()
     active_polls = [p for p in polls if p.is_public()]
 
-    if flask.request.method == 'GET':
-        return flask.render_template('voting.html', polls=active_polls)
-
-    elif flask.request.method == 'POST':
-
-        data = {
-            'value': flask.request.form['value'],
-            'text': flask.request.form['text'],
-            'poll_id': flask.request.form['poll_id']
-        }
-
-        flask.g.model.responses.create_response(data)
-
-        return flask.render_template('voting.html', polls=active_polls, message='Success')
+    return flask.render_template('voting.html', polls=active_polls)
 
 
 @app.route('/skautis')
@@ -103,8 +90,6 @@ def login():
         # check user credentials
         if password == app.config['ADMIN_PASSWORD']:
             flask_login.login_user(User())
-            flask.flash('Logged in successfully.')
-
             return flask.redirect(flask.request.args.get('next') or flask.url_for('admin'))
         return flask.render_template('login.html')
 
@@ -178,6 +163,8 @@ def pollvote():
     }
 
     flask.g.model.responses.create_response(data)
+    flask.flash('Děkujeme za zpětnou vazbu')
+
     return flask.redirect(flask.url_for('voting'))
 
 
