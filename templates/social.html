@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}Sociální síť | Jasan{% endblock %}
+{% block box_title %}Jasan Sociální síť{% endblock %}
+{% block content %}
+
+<div class="box-body table-responsive no-padding">
+  <div class="box-inner">
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Úspěch!</strong> {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="screams">
+      {% for scream in screams %}
+        <div class="scream">
+          <p><span>{{ scream.get_name() }}:</span> {{ scream.get_text() }}</p>
+          <footer>{{ scream.get_created() }}</footer>
+        </div>
+        <hr>
+      {% endfor %}
+    </div>
+
+    <h3>Nový výkřik</h3>
+    <form action="/screambook" method="post">
+      <div class="form-group">
+        <label for="name">Jméno</label>
+        <input type="name" class="form-control" id="name" name="scream_name">
+      </div>
+      <div class="form-group">
+        <label for="text">Výkřik</label>
+        <textarea class="form-control" id="text" name="scream_text" rows="3" required="=required"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

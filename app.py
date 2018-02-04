@@ -80,9 +80,22 @@ def feedback():
         return flask.redirect(flask.url_for('feedback'))
 
 
-@app.route('/screambook')
+@app.route('/screambook', methods=['GET', 'POST'])
 def screambook():
-    return "Nothing here yet!"
+
+    if flask.request.method == 'GET':
+        screams = flask.g.model.screams.find()
+        return flask.render_template('social.html', screams=screams)
+
+    elif flask.request.method == 'POST':
+        data = {
+            'name': flask.request.form['scream_name'],
+            'text': flask.request.form['scream_text']
+        }
+        flask.g.model.screams.create_scream(data)
+        flask.flash('Výkřik uložen')
+
+        return flask.redirect(flask.url_for('screambook'))
 
 
 @app.route('/skautis')

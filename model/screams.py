@@ -1,4 +1,5 @@
 import pymongo
+import datetime
 
 from bson import ObjectId
 
@@ -16,7 +17,6 @@ class Screams(object):
         scream = Scream({
             '_id': ObjectId(),
             'created': datetime.datetime.utcnow(),
-            'device': data['device'],
             'name': data['name'],
             'text': data['text']
         })
@@ -45,7 +45,6 @@ class Scream(object):
     def __init__(self, scream):
         self._id = scream['_id']
         self._created = scream['created']
-        self._device = scream['device']
         self._name = scream['name']
         self._text = scream['text']
 
@@ -55,7 +54,6 @@ class Scream(object):
         if not update:
             scream['_id'] = self._id
             scream['created'] = self._created
-            scream['device'] = self._device
 
         return scream
 
@@ -63,7 +61,6 @@ class Scream(object):
         return {
             'id': str(self._id),
             'created': self._created.isoformat(),
-            'device': self._device,
             'name': self._name,
             'text': self._text
         }
@@ -71,8 +68,14 @@ class Scream(object):
     def get_id(self):
         return str(self._id)
 
-    def set_name(self, text):
-        self._text = data['text']
+    def get_name(self):
+        return self._name
+
+    def get_text(self):
+        return self._text
+
+    def get_created(self):
+        return self._created.isoformat()
 
     def __repr__(self):
         return '<{!r} id={!r} name={!r} text={!r}>' \
