@@ -176,3 +176,7 @@ img.tile-image {
 .alert {
     font-size: 14px;
 }
+
+textarea {
+    resize: none;
+}

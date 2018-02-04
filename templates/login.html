@@ -1,4 +1,16 @@
-<form action="" method="post">
-	<input type=password name=password placeholder="Enter password">
-	<input type=submit value=Login>
-</form>
+{% extends "layout.html" %}
+
+{% block title %}Administrace | Jasan{% endblock %}
+{% block box_title %}Jasan Administrace{% endblock %}
+{% block content %}
+
+<div class="box-inner">
+  <form action="" method="post">
+    <div class="form-group">
+      <input class="form-control" type=password name=password id="password" placeholder="password">
+    </div>
+    <input class="btn btn-primary" type=submit value="Login">
+  </form>
+</div>
+
+{% endblock %}

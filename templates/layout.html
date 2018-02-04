@@ -1,0 +1,34 @@
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>{% block title %}{% endblock %}</title>
+
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/css/style.css" rel="stylesheet">
+  <link rel="shortcut icon" type="image/ico" href="static/img/favicon.ico"/>
+</head>
+<body>
+
+  <div class="container">
+    <div id="content">
+      <div class="box">
+        <div class="box-header">
+          <div id="logos">
+            <img class="logo-image logo-skaut" src="/static/img/skaut-min.png" height="40px">
+            <a href="/"><img class="logo-image logo-jasan" src="/static/img/jasan-min.png" height="50px"></a>
+          </div>
+          <h1 class="box-title">{% block box_title %}{% endblock %}</h1><br>
+        </div>
+        {% block content %}
+        {% endblock %}
+      </div> <!-- /box -->
+    </div><!-- /content -->
+  </div> <!-- /container -->
+
+  <script src="/static/js/popper.min.js"></script>
+  <script src="/static/js/jquery-3.2.1.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+
+</body>
+</html>
