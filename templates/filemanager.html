@@ -16,12 +16,12 @@
       <tr><td class="back"><a class="name" href="{{ server }}{{ back }}">Zpět</a></td></tr>
       {% endif %}
 
-      {% for file in files %}
-        <tr><td><a class="name" href="{{ server }}{{ path }}/{{ file }}">{{ file }}</a></td></tr>
-      {% endfor %}
-
       {% for dir in dirs %}
         <tr class="is_dir"><td class="first"><a class="name" href="{{ server }}{{ path }}/{{ dir }}">{{ dir }}</a></td></tr>
+      {% endfor %}
+
+      {% for file in files %}
+        <tr><td><a class="name" href="{{ server }}{{ path }}/{{ file }}">{{ file }}</a></td></tr>
       {% endfor %}
     </tbody>
   </table>
