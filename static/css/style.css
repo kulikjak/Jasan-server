@@ -1,9 +1,19 @@
 h1 {
     font-size: 20px;
 }
-
 h2 {
     font-size: 18px;
+}
+textarea {
+    resize: none;
+}
+
+.alert {
+    font-size: 14px;
+}
+.btn-logout {
+    float: right;
+    margin: 10px;
 }
 
 .feedbacks h3 {
@@ -16,17 +26,6 @@ h2 {
 .feedbacks footer {
     text-align: right;
     font-size: 10px;
-}
-
-
-.poll h3 {
-    font-size: 16px;
-    line-height: 32px;
-    font-weight: bold;
-}
-.box-inner h3 {
-    font-size: 16px;
-    line-height: 32px;
 }
 
 body {
@@ -61,6 +60,10 @@ body {
 .box-inner {
     padding: 30px;
     text-align: justify;
+}
+.box-inner h3 {
+    font-size: 16px;
+    line-height: 32px;
 }
 
 th {
@@ -154,29 +157,11 @@ td.empty {
     text-align: center;
     padding: 30px;
 }
-
 img.tile-image {
     padding: 20px;
     width: 50%;
 }
 
-.form-check-input {
-    margin-left: 0;
-}
-
-.btn-logout {
-    float: right;
-    margin: 10px;
-}
-
 .feedback {
     padding: 10px;
-}
-
-.alert {
-    font-size: 14px;
-}
-
-textarea {
-    resize: none;
 }

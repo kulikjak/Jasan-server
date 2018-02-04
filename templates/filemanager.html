@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 
 {% block title %}Zápisník | Jasan{% endblock %}
-{% block box_title %}Jasan Zápisník{% endblock %}
+
+{% block box_header %}
+  <h3 class="box-title">Jasan Zápisník</h3><br>
+  <div id="breadcrumb"><div>{{path}}</div></div>
+{% endblock %}
+
 {% block content %}
 
 <div class="box-body table-responsive no-padding">

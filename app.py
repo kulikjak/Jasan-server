@@ -80,7 +80,7 @@ def feedback():
         return flask.redirect(flask.url_for('feedback'))
 
 
-@app.route('/screambook',)
+@app.route('/screambook')
 def screambook():
     return "Nothing here yet!"
 

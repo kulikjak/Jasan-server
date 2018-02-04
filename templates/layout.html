@@ -15,10 +15,12 @@
       <div class="box">
         <div class="box-header">
           <div id="logos">
-            <img class="logo-image logo-skaut" src="/static/img/skaut-min.png" height="40px">
             <a href="/"><img class="logo-image logo-jasan" src="/static/img/Jasan.png" height="50px"></a>
+            <img class="logo-image logo-skaut" src="/static/img/skaut-min.png" height="45px">
           </div>
-          <h1 class="box-title">{% block box_title %}{% endblock %}</h1><br>
+          {% block box_header %}
+            <h1 class="box-title">{% block box_title %}{% endblock %}</h1><br>
+          {% endblock %}
         </div>
         {% block content %}
         {% endblock %}
