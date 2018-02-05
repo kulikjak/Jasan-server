@@ -204,6 +204,7 @@ img.tile-image {
 }
 .scream td {
     border: none;
+    padding-right: 5px;
 }
 .scream-image {
     width: 64px;
