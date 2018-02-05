@@ -169,3 +169,33 @@ img.tile-image {
 .feedback {
     padding: 10px;
 }
+
+.scream td {
+    padding: 5px;
+}
+
+.scream-voting table td {
+    border: none;
+}
+.scream-voting img {
+    max-width: 20px;
+}
+.scream-voting {
+    width: 10px;
+}
+
+td.scream-popularity {
+    width: 36px;
+    font-size: 20px;
+}
+
+.good-color {
+    color: green;
+}
+.bad-color {
+    color: red;
+}
+
+.space {
+    padding: 20px;
+}

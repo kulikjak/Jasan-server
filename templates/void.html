@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}Void | Jasan{% endblock %}
+{% block box_title %}Jasan Void{% endblock %}
+{% block content %}
+
+<div class="box-body no-padding">
+  <div class="box-inner">
+
+    <p>Pokud máš chuť se napříkad vykřičet z některého instruktora a nebo si jenom chceš povídat se sebou, můžeš využít tohoto místa. Cokoliv, co sem napíšeš, je zahozeno.</p>
+
+    <form action="/void" method="post">
+      <div class="form-group">
+        <textarea class="form-control" rows="5" required="=required"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

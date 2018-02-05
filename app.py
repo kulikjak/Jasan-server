@@ -64,6 +64,11 @@ def home():
     return flask.render_template('home.html')
 
 
+@app.route('/void', methods=['GET', 'POST'])
+def void():
+    return flask.render_template('void.html')
+
+
 @app.route('/feedback', methods=['GET', 'POST'])
 def feedback():
     if flask.request.method == 'GET':
@@ -82,7 +87,6 @@ def feedback():
 
 @app.route('/screambook', methods=['GET', 'POST'])
 def screambook():
-
     if flask.request.method == 'GET':
         screams = flask.g.model.screams.find()
         return flask.render_template('social.html', screams=screams)
@@ -96,6 +100,24 @@ def screambook():
         flask.flash('Výkřik uložen')
 
         return flask.redirect(flask.url_for('screambook'))
+
+
+@app.route('/screambook/<scream_id>/like')
+def screambook_like(scream_id):
+    scream = flask.g.model.screams.find_one(scream_id)
+
+    scream.increase_popularity(1)
+    flask.g.model.screams.save(scream)
+    return flask.redirect(flask.url_for('screambook'))
+
+
+@app.route('/screambook/<scream_id>/dislike')
+def screambook_dislike(scream_id):
+    scream = flask.g.model.screams.find_one(scream_id)
+
+    scream.increase_popularity(-1)
+    flask.g.model.screams.save(scream)
+    return flask.redirect(flask.url_for('screambook'))
 
 
 @app.route('/skautis')

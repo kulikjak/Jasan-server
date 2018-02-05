@@ -19,14 +19,34 @@
     {% endwith %}
 
     <div class="screams">
-      {% for scream in screams %}
-        <div class="scream">
-          <p><span>{{ scream.get_name() }}:</span> {{ scream.get_text() }}</p>
-          <footer>{{ scream.get_created() }}</footer>
-        </div>
-        <hr>
-      {% endfor %}
+      <table>
+        <tbody>
+
+          {% for scream in screams %}
+          <tr class="scream">
+            <td class="scream-voting">
+              <table>
+                <tbody>
+                  <tr><td><a href="screambook/{{ scream.get_id() }}/like"><img src="static/img/symbols/SKAUTBold_nahoru.png"></a></td></tr>
+                  <tr><td><a href="screambook/{{ scream.get_id() }}/dislike"><img src="static/img/symbols/SKAUTBold_dolu.png"></a></td></tr>
+                </tbody>
+              </table>
+            </td>
+            <td class="scream-popularity
+                          {% if scream.get_popularity() < 0 %} bad-color {% endif %}
+                          {% if scream.get_popularity() > 0 %} good-color {% endif %}">{{ scream.get_popularity() }}</td>
+            <td class="scream-content">
+              <p><span>{{ scream.get_name() }}</span>: {{ scream.get_text() }}</p>
+              <footer>{{ scream.get_created() }}</footer>
+            </td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
     </div>
+
+    <div class="space"></div>
 
     <h3>Nový výkřik</h3>
     <form action="/screambook" method="post">

@@ -18,7 +18,8 @@ class Screams(object):
             '_id': ObjectId(),
             'created': datetime.datetime.utcnow(),
             'name': data['name'],
-            'text': data['text']
+            'text': data['text'],
+            'popularity': 0
         })
         self._collection.insert_one(scream.serialize())
 
@@ -39,17 +40,29 @@ class Screams(object):
 
         return screams
 
+    def find_one(self, scream_id=None):
+        query = {}
+        if scream_id is not None:
+            query['_id'] = ObjectId(scream_id)
+
+        doc = self._collection.find_one(query)
+        if not doc:
+            return None
+
+        return Scream(doc)
+
 
 class Scream(object):
 
     def __init__(self, scream):
         self._id = scream['_id']
         self._created = scream['created']
+        self._popularity = scream['popularity']
         self._name = scream['name']
         self._text = scream['text']
 
     def serialize(self, update=False):
-        scream = {'name': self._name, 'text': self._text}
+        scream = {'name': self._name, 'text': self._text, 'popularity': self._popularity}
 
         if not update:
             scream['_id'] = self._id
@@ -61,6 +74,7 @@ class Scream(object):
         return {
             'id': str(self._id),
             'created': self._created.isoformat(),
+            'popularity': self._popularity,
             'name': self._name,
             'text': self._text
         }
@@ -76,6 +90,12 @@ class Scream(object):
 
     def get_created(self):
         return self._created.isoformat()
+
+    def get_popularity(self):
+        return self._popularity
+
+    def increase_popularity(self, amount):
+        self._popularity += amount
 
     def __repr__(self):
         return '<{!r} id={!r} name={!r} text={!r}>' \
