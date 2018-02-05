@@ -231,3 +231,9 @@ img.tile-image {
     clear: left;
     height: 0px;
 }
+
+mark {
+    color: blue;
+    font-weight: bold;
+    background: none;
+}
