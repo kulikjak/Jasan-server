@@ -170,23 +170,30 @@ img.tile-image {
     padding: 10px;
 }
 
-.scream td {
-    padding: 5px;
-}
-
-.scream-voting table td {
-    border: none;
-}
 .scream-voting img {
     max-width: 20px;
 }
 .scream-voting {
-    width: 10px;
+    width: 8ex;
+    float: left;
+    margin-right: 7px;
+    margin-left: 7px;
+    background: transparent;
+    overflow: hidden;
 }
-
-td.scream-popularity {
-    width: 36px;
+.scream-popularity {
+    float: left;
+    overflow: hidden;
     font-size: 20px;
+    width: 36px;
+}
+.scream-content {
+    overflow: hidden;
+    margin-left: 3px;
+    opacity: 1;
+}
+.scream td {
+    border: none;
 }
 
 .good-color {
@@ -198,4 +205,8 @@ td.scream-popularity {
 
 .space {
     padding: 20px;
+}
+.clearleft {
+    clear: left;
+    height: 0px;
 }
