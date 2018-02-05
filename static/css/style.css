@@ -170,6 +170,10 @@ img.tile-image {
     padding: 10px;
 }
 
+.scream {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
 .scream-voting img {
     max-width: 20px;
 }
