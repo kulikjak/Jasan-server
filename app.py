@@ -9,6 +9,7 @@ import pymongo
 from flask_login import login_required
 from flask_login import UserMixin
 
+from utils import generate_random_filename
 from utils import check_config
 from utils import setup_logging
 
@@ -56,6 +57,11 @@ def load_user(userid):
     return User()
 
 
+def allowed_upload_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+
 # ----- routing ----- #
 
 
@@ -92,9 +98,21 @@ def screambook():
         return flask.render_template('social.html', screams=screams)
 
     elif flask.request.method == 'POST':
+        filename = None
+
+        # check for file upload
+        if 'scream_image' in flask.request.files:
+            file = flask.request.files['scream_image']
+
+            if file and allowed_upload_file(file.filename):
+                extension = file.filename.rsplit('.', 1)[1].lower()
+                filename = '{}.{}'.format(generate_random_filename(), extension)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
         data = {
             'name': flask.request.form['scream_name'],
-            'text': flask.request.form['scream_text']
+            'text': flask.request.form['scream_text'],
+            'image': filename
         }
         flask.g.model.screams.create_scream(data)
         flask.flash('Výkřik uložen')
@@ -156,6 +174,16 @@ def admin():
     return flask.render_template('admin.html', feedbacks=feedbacks)
 
 
+@app.route('/uploads/<image>')
+def uploads(image):
+    image = 'uploads/{}'.format(image)
+    if os.path.isfile(image):
+        _dir, _file = image.rsplit('/', 1)
+        return flask.send_from_directory(directory=_dir, filename=_file)
+
+    return "Nothing to show", 404
+
+
 @app.route('/journal', defaults={'path': ''})
 @app.route('/journal/<path:path>')
 def routing(path):
@@ -171,7 +199,7 @@ def routing(path):
         listing = os.listdir(path)
         _dirs = [d for d in listing if os.path.isdir(os.path.join(path, d))]
         _files = [f for f in listing if os.path.isfile(os.path.join(path, f))]
-        _back = path.rsplit('/', 1)[0] if (path != app.config['FILE_ROOT']) else None
+        _back = path.rsplit('/', 1)[0] if (path != app.config['JOURNAL_ROOT']) else None
 
         return flask.render_template(
             'filemanager.html',

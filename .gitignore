@@ -1,4 +1,5 @@
 __venv__/
 __pycache__/
 journal/
+uploads/
 *.pyc

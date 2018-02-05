@@ -149,6 +149,12 @@ td.empty {
 		display: none;
 	}
 }
+@media screen and (max-width: 767px) {
+    .box-inner {
+        padding-left: 0px;
+        padding-right: 10px;
+    }
+}
 
 .tiles {
     overflow: auto;
@@ -178,7 +184,7 @@ img.tile-image {
     max-width: 20px;
 }
 .scream-voting {
-    width: 8ex;
+    width: 7.5ex;
     float: left;
     margin-right: 7px;
     margin-left: 7px;
@@ -198,6 +204,17 @@ img.tile-image {
 }
 .scream td {
     border: none;
+}
+.scream-image {
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    float: left;
+    margin-right: 10px;
+}
+.scream-image img {
+    max-width: 200%;
+    max-height: 200%;
 }
 
 .good-color {

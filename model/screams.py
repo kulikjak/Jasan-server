@@ -19,6 +19,7 @@ class Screams(object):
             'created': datetime.datetime.utcnow(),
             'name': data['name'],
             'text': data['text'],
+            'image': data['image'],
             'popularity': 0
         })
         self._collection.insert_one(scream.serialize())
@@ -60,9 +61,15 @@ class Scream(object):
         self._popularity = scream['popularity']
         self._name = scream['name']
         self._text = scream['text']
+        self._image = scream['image']
 
     def serialize(self, update=False):
-        scream = {'name': self._name, 'text': self._text, 'popularity': self._popularity}
+        scream = {
+            'name': self._name,
+            'text': self._text,
+            'image': self._image,
+            'popularity': self._popularity
+        }
 
         if not update:
             scream['_id'] = self._id
@@ -76,7 +83,8 @@ class Scream(object):
             'created': self._created.isoformat(),
             'popularity': self._popularity,
             'name': self._name,
-            'text': self._text
+            'text': self._text,
+            'image': self._image
         }
 
     def get_id(self):
@@ -93,6 +101,9 @@ class Scream(object):
 
     def get_popularity(self):
         return self._popularity
+
+    def get_image(self):
+        return self._image
 
     def increase_popularity(self, amount):
         self._popularity += amount

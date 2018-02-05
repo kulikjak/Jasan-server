@@ -13,4 +13,7 @@ MONGODB_URI = getenv('JASAN_MONGODB_URI', 'mongodb://localhost:27017/jasan')
 
 ADMIN_PASSWORD = getenv('JASAN_PASSWORD', 'S3cr3tPa55w0rd')
 
-FILE_ROOT = 'journal'
+JOURNAL_ROOT = 'journal'
+UPLOAD_FOLDER = 'uploads'
+
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])

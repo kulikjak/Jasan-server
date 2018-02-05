@@ -34,4 +34,18 @@ def add_scream_popularity():
         scream['popularity'] = 0
         collection.update_one({'_id': scream['_id']}, {'$set': scream})
 
+
+def add_scream_image():
+    collection = db['screams']
+    screams = collection.find()
+
+    for scream in screams:
+        if 'image' in scream:
+            continue
+
+        scream['image'] = None
+        collection.update_one({'_id': scream['_id']}, {'$set': scream})
+
+
 add_scream_popularity()
+add_scream_image()
