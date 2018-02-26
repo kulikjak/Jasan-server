@@ -19,7 +19,8 @@ class Screams(object):
             'created': datetime.datetime.utcnow(),
             'name': data['name'],
             'text': data['text'],
-            'image': data['image'],
+            'user_id': data['user_id'],
+            'attachment': data['attachment'],
             'popularity': 0
         })
         self._collection.insert_one(scream.serialize())
@@ -58,16 +59,18 @@ class Scream(object):
     def __init__(self, scream):
         self._id = scream['_id']
         self._created = scream['created']
-        self._popularity = scream['popularity']
         self._name = scream['name']
         self._text = scream['text']
-        self._image = scream['image']
+        self._user_id = scream['user_id']
+        self._attachment = scream['attachment']
+        self._popularity = scream['popularity']
 
     def serialize(self, update=False):
         scream = {
             'name': self._name,
             'text': self._text,
-            'image': self._image,
+            'user_id': self._user_id,
+            'attachment': self._attachment,
             'popularity': self._popularity
         }
 
@@ -81,10 +84,11 @@ class Scream(object):
         return {
             'id': str(self._id),
             'created': self._created.isoformat(),
-            'popularity': self._popularity,
             'name': self._name,
             'text': self._text,
-            'image': self._image
+            'attachment': self._attachment,
+            'user_id': self._user_id,
+            'popularity': self._popularity
         }
 
     def get_id(self):
@@ -99,14 +103,24 @@ class Scream(object):
     def get_created(self):
         return self._created.isoformat()
 
+    def get_user_id(self):
+        return self._user_id
+
+    def get_attachment(self, thumbnail=False):
+        if thumbnail:
+            path, ext = self._attachment.split('.')
+            return '{}_thumbnail.{}'.format(path, ext)
+        return self._attachment
+
     def get_popularity(self):
         return self._popularity
 
-    def get_image(self):
-        return self._image
-
     def increase_popularity(self, amount):
         self._popularity += amount
+
+    def set_data(self, data):
+        self._name = data['name'] if 'name' in data else self._name
+        self._text = data['text'] if 'text' in data else self._text
 
     def __repr__(self):
         return '<{!r} id={!r} name={!r} text={!r}>' \

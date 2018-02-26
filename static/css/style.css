@@ -62,7 +62,7 @@ body {
     background: white;
 }
 .box-inner {
-    padding: 30px;
+    padding: 20px;
 }
 .box-inner h3 {
     font-size: 16px;
@@ -150,7 +150,7 @@ td.empty {
 }
 @media screen and (max-width: 767px) {
     .box-inner {
-        padding-left: 0px;
+        padding-left: 10px;
         padding-right: 10px;
     }
 }
@@ -186,7 +186,6 @@ img.tile-image {
     width: 7.5ex;
     float: left;
     margin-right: 7px;
-    margin-left: 7px;
     background: transparent;
     overflow: hidden;
 }
@@ -236,4 +235,26 @@ mark {
     color: blue;
     font-weight: bold;
     background: none;
+}
+
+.scream-delete-form {
+    display: inline;
+}
+
+.scream-button {
+    border: none;
+    background: none;
+    color: #686868;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#add-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+}
+
+#add-button button {
+    padding: 1rem 1.2rem;
 }

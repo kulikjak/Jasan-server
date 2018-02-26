@@ -19,7 +19,8 @@ class Feedbacks(object):
             '_id': ObjectId(),
             'created': datetime.datetime.utcnow(),
             'title': data['title'],
-            'text': data['text']
+            'text': data['text'],
+            'user_id': data['user_id']
         })
         self._collection.insert_one(feedback.serialize())
 
@@ -53,9 +54,14 @@ class Feedback(object):
         self._created = feedback['created']
         self._title = feedback['title']
         self._text = feedback['text']
+        self._user_id = feedback['user_id']
 
     def serialize(self, update=False):
-        feedback = {'title': self._title, 'text': self._text}
+        feedback = {
+            'title': self._title,
+            'text': self._text,
+            'user_id': self._user_id
+        }
         if not update:
             feedback['_id'] = self._id
             feedback['created'] = self._created
@@ -67,7 +73,8 @@ class Feedback(object):
             'id': str(self._id),
             'created': self._created.isoformat(),
             'title': self._title,
-            'text': self._text
+            'text': self._text,
+            'user_id': self._user_id
         }
 
     def get_id(self):
@@ -78,6 +85,9 @@ class Feedback(object):
 
     def get_text(self):
         return self._text
+
+    def get_user_id(self):
+        return self._user_id
 
     def get_created(self):
         return self._created.isoformat()

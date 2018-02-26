@@ -23,6 +23,40 @@ db = mongo_client[parsed.path[1:]]
 model = Model(db=db)
 
 
+def add_user_ids():
+    collection = db['screams']
+    screams = collection.find()
+
+    for scream in screams:
+        if 'user_id' in scream:
+            continue
+
+        scream['user_id'] = None
+        collection.update_one({'_id': scream['_id']}, {'$set': scream})
+
+    collection = db['feedbacks']
+    feedbacks = collection.find()
+
+    for feedback in feedbacks:
+        if 'user_id' in feedback:
+            continue
+
+        feedback['user_id'] = None
+        collection.update_one({'_id': feedback['_id']}, {'$set': feedback})
+
+
+def rename_scream_image_attachment():
+    collection = db['screams']
+    screams = collection.find()
+
+    for scream in screams:
+        if 'image' in scream:
+            scream['attachment'] = scream['image']
+
+            collection.update_one({'_id': scream['_id']}, {'$unset': {'image': ''}})
+            collection.update_one({'_id': scream['_id']}, {'$set': scream})
+
+
 def add_scream_popularity():
     collection = db['screams']
     screams = collection.find()
@@ -47,5 +81,7 @@ def add_scream_image():
         collection.update_one({'_id': scream['_id']}, {'$set': scream})
 
 
-add_scream_popularity()
 add_scream_image()
+add_scream_popularity()
+rename_scream_image_attachment()
+add_user_ids()

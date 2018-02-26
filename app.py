@@ -6,24 +6,22 @@ import flask
 import flask_login
 import pymongo
 
+import utils
+
 from flask_login import login_required
 from flask_login import UserMixin
-
-from utils import generate_random_filename
-from utils import check_config
-from utils import setup_logging
 
 from model import Model
 
 # create logger
 logger = logging.getLogger(__name__)
-setup_logging()
+utils.setup_logging()
 
 # create Flask application
 app = flask.Flask(__name__)
 app.config.from_pyfile('config.py')
 
-check_config(app)
+utils.check_config(app)
 
 # prepare database connection
 parsed = urllib.parse.urlsplit(app.config['MONGODB_URI'])
@@ -83,41 +81,62 @@ def feedback():
     elif flask.request.method == 'POST':
         data = {
             'title': flask.request.form['feedback_title'],
-            'text': flask.request.form['feedback_text']
+            'text': flask.request.form['feedback_text'],
+            'user_id': flask.request.form['user_id']
         }
         flask.g.model.feedbacks.create_feedback(data)
-        flask.flash('Děkujeme za zpětnou vazbu')
+        flask.flash('Děkujeme za zpětnou vazbu', 'success')
 
         return flask.redirect(flask.url_for('feedback'))
 
 
 @app.route('/screambook', methods=['GET', 'POST'])
 def screambook():
+    user_id = flask.request.cookies.get('jasanUIDCookie')
+
     if flask.request.method == 'GET':
         screams = flask.g.model.screams.find()
-        return flask.render_template('social.html', screams=screams)
+        return flask.render_template('social.html', screams=screams, user_id=user_id)
 
     elif flask.request.method == 'POST':
         filename = None
 
         # check for file upload
-        if 'scream_image' in flask.request.files:
-            file = flask.request.files['scream_image']
+        if 'scream_attachment' in flask.request.files:
+            file = flask.request.files['scream_attachment']
 
             if file and allowed_upload_file(file.filename):
                 extension = file.filename.rsplit('.', 1)[1].lower()
-                filename = '{}.{}'.format(generate_random_filename(), extension)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                filename = '{}.{}'.format(utils.generate_random_filename(), extension)
+                complete_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(complete_path)
+                utils.create_thumbnail(complete_path, 128)
 
         data = {
             'name': flask.request.form['scream_name'],
             'text': flask.request.form['scream_text'],
-            'image': filename
+            'user_id': flask.request.cookies.get('jasanUIDCookie'),
+            'attachment': filename
         }
         flask.g.model.screams.create_scream(data)
-        flask.flash('Výkřik uložen')
-
+        flask.flash('Výkřik uložen', 'success')
         return flask.redirect(flask.url_for('screambook'))
+
+
+@app.route('/screambook/delete/<scream_id>', methods=['GET'])
+def screambook_delete(scream_id):
+    user_id = flask.request.cookies.get('jasanUIDCookie')
+
+    # check if this scream belongs to current user
+    scream = flask.g.model.screams.find_one(scream_id)
+    if scream.get_user_id() != user_id or user_id == None:
+        flask.flash('Tento výkřik není tvůj!', 'danger')
+        return flask.redirect(flask.url_for('screambook'))
+
+    flask.g.model.screams.delete(scream)
+    flask.flash('Výkřik vymazán', 'success')
+
+    return flask.redirect(flask.url_for('screambook'))
 
 
 @app.route('/screambook/<scream_id>/like')

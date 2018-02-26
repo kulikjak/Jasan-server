@@ -16,4 +16,4 @@ ADMIN_PASSWORD = getenv('JASAN_PASSWORD', 'S3cr3tPa55w0rd')
 JOURNAL_ROOT = 'journal'
 UPLOAD_FOLDER = 'uploads'
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])

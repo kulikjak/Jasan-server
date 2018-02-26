@@ -7,12 +7,16 @@
 <div class="box-body table-responsive no-padding">
   <div class="box-inner">
 
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-success alert-dismissable">
+        {% for category, message in messages %}
+          <div class="alert alert-{{category}} alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>Úspěch!</strong> {{ message }}
+            {% if category == "success" %}
+              <strong>Úspěch!</strong> {{ message }}
+            {% elif category == "danger" %}
+              <strong>Chyba!</strong> {{ message }}
+            {% endif %}
           </div>
         {% endfor %}
       {% endif %}
@@ -38,14 +42,21 @@
             </tbody>
           </table>
         </div>
-        {% if scream.get_image() %}
+        {% if scream.get_attachment() %}
           <div class="scream-image">
-            <a href="uploads/{{ scream.get_image() }}"><img src="uploads/{{ scream.get_image() }}"></a>
+            <a href="uploads/{{ scream.get_attachment() }}"><img src="uploads/{{ scream.get_attachment(thumbnail=True) }}"></a>
           </div>
         {% endif %}
         <div class="scream-content">
           <p><span>{{ scream.get_name() }}</span>: {{ scream.get_text() }}</p>
-          <footer>{{ scream.get_created() }}</footer>
+          <footer>
+            {% if user_id == scream.get_user_id() %}
+              <form class="scream-delete-form" action="/screambook/delete/{{ scream.get_id() }}" method="get">
+                <button type="submit" class="scream-button"><i class="fa fa-trash"></i></button>
+              </form>
+            {% endif %}
+            {{ scream.get_created() }}
+          </footer>
         </div>
         <div class="clearleft"></div>
       </div>
@@ -56,7 +67,7 @@
     <div class="space"></div>
 
     <h3>Nový výkřik</h3>
-    <form action="/screambook" enctype="multipart/form-data" method="post">
+    <form action="/screambook" id="scream-form" enctype="multipart/form-data" method="post">
       <div class="form-group">
         <label for="name">Jméno</label>
         <input type="name" class="form-control" id="name" name="scream_name">
@@ -67,17 +78,41 @@
       </div>
       <div class="form-group">
         <label for="image">Obrázek</label>
-        <input class="form-control-file" id="image" type=file name="scream_image">
+        <input class="form-control-file" id="image" type=file name="scream_attachment">
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
 </div>
 
+<div id="add-button" style="display: none;">
+  <button class="btn btn-primary" onclick="window.location.href='#scream-form'; $('#text').focus();"><i class="fa fa-plus"></i></button>
+</div>
+
 <script src="/static/js/jquery.mark.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     $(".screams").markRegExp(/([@]|[#])([a-z])\w+/gmi);
+
+    if (screen.height + 80 < $(document).height()) {
+      $('#add-button').show();
+    }
+  });
+</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    var cookie = getCookie('jasanNameCookie');
+    if (cookie) {
+      $("#name").val(cookie);
+    }
+  });
+  $('#scream-form').submit(function(e) {
+    setCookie("jasanNameCookie", $("#name").val())
+  });
+  $('.scream-delete-form').submit(function(e) {
+    var answer = confirm('Skutečně chceš tento výkřik smazat?');
+    if(!answer)
+     e.preventDefault();
   });
 </script>
 
