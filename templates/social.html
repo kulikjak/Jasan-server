@@ -33,7 +33,9 @@
               <tr>
                 <td><a href="screambook/{{ scream.get_id() }}/like"><img src="static/img/symbols/SKAUTBold_nahoru.png"></a></td>
                 <td rowspan="2">
-                  <div class="scream-popularity {% if scream.get_popularity() < 0 %} bad-color {% endif %}{% if scream.get_popularity() > 0 %} good-color {% endif %}">
+                  <div class="scream-popularity {% if scream.get_popularity() < 0 %} bad-color
+                                                {% elif scream.get_popularity() > 0 %} good-color
+                                                {% elif scream._popularity is not none %} even-color {% endif %}">
                     {{ scream.get_popularity() }}
                   </div>
                 </td>

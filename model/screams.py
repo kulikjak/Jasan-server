@@ -21,7 +21,7 @@ class Screams(object):
             'text': data['text'],
             'user_id': data['user_id'],
             'attachment': data['attachment'],
-            'popularity': 0
+            'popularity': None
         })
         self._collection.insert_one(scream.serialize())
 
@@ -113,10 +113,13 @@ class Scream(object):
         return self._attachment
 
     def get_popularity(self):
-        return self._popularity
+        return self._popularity if self._popularity else 0
 
     def increase_popularity(self, amount):
-        self._popularity += amount
+        if self._popularity:
+            self._popularity += amount
+        else:
+            self._popularity = amount
 
     def set_data(self, data):
         self._name = data['name'] if 'name' in data else self._name
