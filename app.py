@@ -101,6 +101,17 @@ def screambook():
     elif flask.request.method == 'POST':
         filename = None
 
+        scream_name = flask.request.form['scream_name']
+        scream_text = flask.request.form['scream_text']
+
+        if scream_name is None or scream_name == '':
+            flask.flash('Výkřik musí mít zadané jméno', 'danger')
+            return flask.redirect(flask.url_for('screambook'))
+
+        if scream_text is None or scream_text == '':
+            flask.flash('Výkřik musí mít nějaký text', 'danger')
+            return flask.redirect(flask.url_for('screambook'))
+
         # check for file upload
         if 'scream_attachment' in flask.request.files:
             file = flask.request.files['scream_attachment']
@@ -113,8 +124,8 @@ def screambook():
                 utils.create_thumbnail(complete_path, 128)
 
         data = {
-            'name': flask.request.form['scream_name'],
-            'text': flask.request.form['scream_text'],
+            'name': scream_name,
+            'text': scream_text,
             'user_id': flask.request.cookies.get('jasanUIDCookie'),
             'attachment': filename
         }
