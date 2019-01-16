@@ -1,57 +1,22 @@
-import pymongo
 import datetime
 
-from bson import ObjectId
+from util import DatabaseWrapper
 
 
-class Screams(object):
-
-    COLLECTION_NAME = 'screams'
+class Screams(DatabaseWrapper):
 
     def __init__(self, model, db):
-        self._model = model
-        self._db = db
-        self._collection = db[self.COLLECTION_NAME]
+        super().__init__(db['screams'], Scream)
 
-    def create_scream(self, data):
-        scream = Scream({
-            '_id': ObjectId(),
+    def sanitize_data(self, data):
+        return {
             'created': datetime.datetime.utcnow(),
             'name': data['name'],
             'text': data['text'],
             'user_id': data['user_id'],
             'attachment': data['attachment'],
             'popularity': None
-        })
-        self._collection.insert_one(scream.serialize())
-
-        return scream
-
-    def save(self, scream):
-        self._collection.update_one({'_id': scream._id}, {'$set': scream.serialize(update=True)})
-
-    def delete(self, scream):
-        self._collection.delete_one({'_id': scream._id})
-
-    def find(self):
-        doc = self._collection.find({}).sort('created', pymongo.DESCENDING)
-
-        screams = []
-        for scream in doc:
-            screams.append(Scream(scream))
-
-        return screams
-
-    def find_one(self, scream_id=None):
-        query = {}
-        if scream_id is not None:
-            query['_id'] = ObjectId(scream_id)
-
-        doc = self._collection.find_one(query)
-        if not doc:
-            return None
-
-        return Scream(doc)
+        }
 
 
 class Scream(object):
@@ -91,40 +56,42 @@ class Scream(object):
             'popularity': self._popularity
         }
 
-    def get_id(self):
+    @property
+    def id(self):
         return str(self._id)
 
-    def get_name(self):
+    @property
+    def name(self):
         return self._name
 
-    def get_text(self):
+    @property
+    def text(self):
         return self._text
 
-    def get_created(self):
+    @property
+    def created(self):
         return self._created.isoformat()
 
-    def get_user_id(self):
+    @property
+    def user_id(self):
         return self._user_id
 
-    def get_attachment(self, thumbnail=False):
-        if thumbnail:
-            path, ext = self._attachment.split('.')
-            return '{}_thumbnail.{}'.format(path, ext)
+    @property
+    def attachment(self):
         return self._attachment
 
-    def get_popularity(self):
+    @property
+    def thumbnail(self):
+        path, ext = self._attachment.split('.')
+        return f'{path}_thumbnail.{ext}'
+
+    @property
+    def popularity(self):
         return self._popularity if self._popularity else 0
 
-    def increase_popularity(self, amount):
-        if self._popularity:
-            self._popularity += amount
-        else:
-            self._popularity = amount
-
-    def set_data(self, data):
-        self._name = data['name'] if 'name' in data else self._name
-        self._text = data['text'] if 'text' in data else self._text
+    @popularity.setter
+    def popularity(self, value):
+        self._popularity = value
 
     def __repr__(self):
-        return '<{!r} id={!r} name={!r} text={!r}>' \
-            .format(self.__class__.__name__, self._id, self._name, self._text)
+        return f'<{self.__class__.__name__!r} id={self._id!r} name={self._name} text={self._text}>'

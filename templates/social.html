@@ -31,33 +31,33 @@
           <table>
             <tbody>
               <tr>
-                <td><a href="screambook/{{ scream.get_id() }}/like"><img src="static/img/symbols/SKAUTBold_nahoru.png"></a></td>
+                <td><a href="screambook/{{ scream.id }}/like"><img src="static/img/symbols/SKAUTBold_nahoru.png"></a></td>
                 <td rowspan="2">
-                  <div class="scream-popularity {% if scream.get_popularity() < 0 %} bad-color
-                                                {% elif scream.get_popularity() > 0 %} good-color
+                  <div class="scream-popularity {% if scream.popularity < 0 %} bad-color
+                                                {% elif scream.popularity > 0 %} good-color
                                                 {% elif scream._popularity is not none %} even-color {% endif %}">
-                    {{ scream.get_popularity() }}
+                    {{ scream.popularity }}
                   </div>
                 </td>
               </tr>
-              <tr><td><a href="screambook/{{ scream.get_id() }}/dislike"><img src="static/img/symbols/SKAUTBold_dolu.png"></a></td></tr>
+              <tr><td><a href="screambook/{{ scream.id }}/dislike"><img src="static/img/symbols/SKAUTBold_dolu.png"></a></td></tr>
             </tbody>
           </table>
         </div>
-        {% if scream.get_attachment() %}
+        {% if scream.attachment %}
           <div class="scream-image">
-            <a href="uploads/{{ scream.get_attachment() }}"><img src="uploads/{{ scream.get_attachment(thumbnail=True) }}"></a>
+            <a href="uploads/{{ scream.attachment }}"><img src="uploads/{{ scream.thumbnail }}"></a>
           </div>
         {% endif %}
         <div class="scream-content">
-          <p><span>{{ scream.get_name() }}</span>: {{ scream.get_text() }}</p>
+          <p><span>{{ scream.name }}</span>: {{ scream.text }}</p>
           <footer>
-            {% if user_id == scream.get_user_id() %}
-              <form class="scream-delete-form" action="/screambook/delete/{{ scream.get_id() }}" method="get">
+            {% if user_id == scream.user_id %}
+              <form class="scream-delete-form" action="/screambook/delete/{{ scream.id }}" method="get">
                 <button type="submit" class="scream-button"><i class="fa fa-trash"></i></button>
               </form>
             {% endif %}
-            {{ scream.get_created() }}
+            {{ scream.created }}
           </footer>
         </div>
         <div class="clearleft"></div>

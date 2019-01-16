@@ -1,50 +1,19 @@
 import datetime
-import pymongo
 
-from bson import ObjectId
+from util import DatabaseWrapper
 
 
-class Feedbacks(object):
-
-    COLLECTION_NAME = 'feedbacks'
+class Feedbacks(DatabaseWrapper):
 
     def __init__(self, model, db):
-        self._model = model
-        self._db = db
-        self._collection = db[self.COLLECTION_NAME]
+        super().__init__(db['feedbacks'], Feedback)
 
-    def create_feedback(self, data):
-
-        feedback = Feedback({
-            '_id': ObjectId(),
+    def sanitize_data(self, data):
+        return {
             'created': datetime.datetime.utcnow(),
             'title': data['title'],
-            'text': data['text'],
-            'user_id': data['user_id']
-        })
-        self._collection.insert_one(feedback.serialize())
-
-        return feedback
-
-    def save(self, feedback):
-        self._collection.update_one(
-            {
-                '_id': feedback._id
-            }, {
-                '$set': feedback.serialize(update=True)
-            })
-
-    def delete(self, feedback):
-        self._collection.delete_one({'_id': feedback._id})
-
-    def find(self):
-        doc = self._collection.find({}).sort('created', pymongo.DESCENDING)
-
-        feedbacks = []
-        for feedback in doc:
-            feedbacks.append(Feedback(feedback))
-
-        return feedbacks
+            'text': data['text']
+        }
 
 
 class Feedback(object):
@@ -54,13 +23,11 @@ class Feedback(object):
         self._created = feedback['created']
         self._title = feedback['title']
         self._text = feedback['text']
-        self._user_id = feedback['user_id']
 
     def serialize(self, update=False):
         feedback = {
             'title': self._title,
-            'text': self._text,
-            'user_id': self._user_id
+            'text': self._text
         }
         if not update:
             feedback['_id'] = self._id
@@ -73,25 +40,24 @@ class Feedback(object):
             'id': str(self._id),
             'created': self._created.isoformat(),
             'title': self._title,
-            'text': self._text,
-            'user_id': self._user_id
+            'text': self._text
         }
 
-    def get_id(self):
+    @property
+    def id(self):
         return str(self._id)
 
-    def get_title(self):
+    @property
+    def title(self):
         return self._title
 
-    def get_text(self):
+    @property
+    def text(self):
         return self._text
 
-    def get_user_id(self):
-        return self._user_id
-
-    def get_created(self):
+    @property
+    def created(self):
         return self._created.isoformat()
 
     def __repr__(self):
-        return '<{!r} id={!r} title={!r} created={!r} text={!r}>' \
-            .format(self.__class__.__name__, self._id, self._title, self._created.isoformat(), self._text)
+        return f'<{self.__class__.__name__!r} id={self._id!r} title={self._title} created={self._created.isoformat()} text={self._text}>'

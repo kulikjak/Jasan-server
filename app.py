@@ -81,10 +81,9 @@ def feedback():
     elif flask.request.method == 'POST':
         data = {
             'title': flask.request.form['feedback_title'],
-            'text': flask.request.form['feedback_text'],
-            'user_id': flask.request.form['user_id']
+            'text': flask.request.form['feedback_text']
         }
-        flask.g.model.feedbacks.create_feedback(data)
+        flask.g.model.feedbacks.create(data)
         flask.flash('Děkujeme za zpětnou vazbu', 'success')
 
         return flask.redirect(flask.url_for('feedback'))
@@ -129,7 +128,7 @@ def screambook():
             'user_id': flask.request.cookies.get('jasanUIDCookie'),
             'attachment': filename
         }
-        flask.g.model.screams.create_scream(data)
+        flask.g.model.screams.create(data)
         flask.flash('Výkřik uložen', 'success')
         return flask.redirect(flask.url_for('screambook'))
 
@@ -140,7 +139,7 @@ def screambook_delete(scream_id):
 
     # check if this scream belongs to current user
     scream = flask.g.model.screams.find_one(scream_id)
-    if scream.get_user_id() != user_id or user_id == None:
+    if scream.user_id != user_id or user_id == None:
         flask.flash('Tento výkřik není tvůj!', 'danger')
         return flask.redirect(flask.url_for('screambook'))
 
@@ -154,7 +153,7 @@ def screambook_delete(scream_id):
 def screambook_like(scream_id):
     scream = flask.g.model.screams.find_one(scream_id)
 
-    scream.increase_popularity(1)
+    scream.popularity += 1
     flask.g.model.screams.save(scream)
     return flask.redirect(flask.url_for('screambook'))
 
@@ -163,7 +162,7 @@ def screambook_like(scream_id):
 def screambook_dislike(scream_id):
     scream = flask.g.model.screams.find_one(scream_id)
 
-    scream.increase_popularity(-1)
+    scream.popularity -= 1
     flask.g.model.screams.save(scream)
     return flask.redirect(flask.url_for('screambook'))
 

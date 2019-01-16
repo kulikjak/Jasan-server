@@ -11,9 +11,9 @@
 
       {% for feedback in feedbacks %}
         <div class="feedback">
-          <h3>{{ feedback.get_title() }}</h3>
-          <p>{{ feedback.get_text() }}</p>
-          <footer>{{ feedback.get_created() }}</footer>
+          <h3>{{ feedback.title }}</h3>
+          <p>{{ feedback.text }}</p>
+          <footer>{{ feedback.created }}</footer>
         </div>
         <hr>
       {% endfor %}
