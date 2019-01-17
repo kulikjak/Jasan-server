@@ -6,22 +6,25 @@ import flask
 import flask_login
 import pymongo
 
-import utils
-
 from flask_login import login_required
 from flask_login import UserMixin
 
-from model import Model
+from server.model import Model
+from server.util import check_config
+from server.util import setup_logging
+
+from server.util import generate_random_filename
+from server.util import create_thumbnail
 
 # create logger
 logger = logging.getLogger(__name__)
-utils.setup_logging()
+setup_logging()
 
 # create Flask application
 app = flask.Flask(__name__)
 app.config.from_pyfile('config.py')
 
-utils.check_config(app)
+check_config(app)
 
 # prepare database connection
 parsed = urllib.parse.urlsplit(app.config['MONGODB_URI'])
@@ -117,10 +120,10 @@ def screambook():
 
             if file and allowed_upload_file(file.filename):
                 extension = file.filename.rsplit('.', 1)[1].lower()
-                filename = '{}.{}'.format(utils.generate_random_filename(), extension)
+                filename = '{}.{}'.format(generate_random_filename(), extension)
                 complete_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(complete_path)
-                utils.create_thumbnail(complete_path, 128)
+                create_thumbnail(complete_path, 128)
 
         data = {
             'name': scream_name,

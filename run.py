@@ -1,6 +1,8 @@
+#!./__venv__/bin/python3.6
+
 import logging
 
-from app import app
+from server.app import app
 
 logger = logging.getLogger(__name__)
 

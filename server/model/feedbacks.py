@@ -1,6 +1,6 @@
 import datetime
 
-from util import DatabaseWrapper
+from server.util import DatabaseWrapper
 
 
 class Feedbacks(DatabaseWrapper):

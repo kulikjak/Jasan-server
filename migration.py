@@ -9,12 +9,12 @@ from pymongo import MongoClient
 from urllib.parse import urlsplit
 
 from bson import ObjectId
-from model import Model
+from server.model import Model
 
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
+app.config.from_pyfile('server/config.py')
 
 parsed = urlsplit(app.config['MONGODB_URI'])
 mongo_client = MongoClient(app.config['MONGODB_URI'])
