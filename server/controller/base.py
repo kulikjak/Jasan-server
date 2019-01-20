@@ -1,4 +1,5 @@
 import os
+import hashlib
 import flask
 import flask_login
 
@@ -9,22 +10,16 @@ from server.model import Model
 from server.app import app
 
 from flask_login import login_required
-from flask_login import UserMixin
 
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-# User base class
-class User(UserMixin):
-
-    def __init__(self):
-        self.id = 0
 
 # callback to reload the user object
 @login_manager.user_loader
-def load_user(userid):
-    return User()
+def load_user(user_id):
+    return flask.g.model.users.find_one(user_id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -35,12 +30,20 @@ def login():
     elif flask.request.method == 'POST':
 
         # get credentials from POST request
+        username = flask.request.form['username'].lower()
         password = flask.request.form['password']
+        phash = hashlib.sha256(password.encode("utf-8")).hexdigest()
 
-        # check user credentials
-        if password == app.config['ADMIN_PASSWORD']:
-            flask_login.login_user(User())
+        users = flask.g.model.users.find_query({'name': username})
+        if not users:
+            return flask.render_template('login.html')
+
+        user = users[0]
+        if user.password == phash:
+            flask_login.login_user(user)
+
             return flask.redirect(flask.request.args.get('next') or flask.url_for('admin'))
+
         return flask.render_template('login.html')
 
 

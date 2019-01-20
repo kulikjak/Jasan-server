@@ -39,5 +39,14 @@ class DatabaseWrapper(object):
 
         return self._data_class(doc)
 
+    def find_query(self, query):
+        doc = self._collection.find(query)
+
+        objs = []
+        for obj in doc:
+            objs.append(self._data_class(obj))
+
+        return objs
+
     def delete(self, obj):
         self._collection.delete_one({'_id': obj._id})
