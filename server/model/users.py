@@ -30,20 +30,16 @@ class User(UserMixin):
         self._active = user['active']
         self._admin = user['admin']
 
-    def serialize(self, update=False):
-        user = {
+    def serialize(self):
+        return {
             'name': self._name,
             'password': self._password,
             'email': self._email,
             'active': self._active,
             'admin': self._admin
         }
-        if not update:
-            user['_id'] = self._id
 
-        return user
-
-    def get_serialized_data(self):
+    def toJson(self):
         return {
             'id': str(self._id),
             'created': self._id.generation_time,

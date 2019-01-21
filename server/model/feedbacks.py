@@ -10,7 +10,6 @@ class Feedbacks(DatabaseWrapper):
 
     def sanitize_data(self, data):
         return {
-            'created': datetime.datetime.utcnow(),
             'title': data['title'],
             'text': data['text']
         }
@@ -20,25 +19,19 @@ class Feedback(object):
 
     def __init__(self, feedback):
         self._id = feedback['_id']
-        self._created = feedback['created']
         self._title = feedback['title']
         self._text = feedback['text']
 
-    def serialize(self, update=False):
-        feedback = {
+    def serialize(self):
+        return {
             'title': self._title,
             'text': self._text
         }
-        if not update:
-            feedback['_id'] = self._id
-            feedback['created'] = self._created
 
-        return feedback
-
-    def get_serialized_data(self):
+    def toJson(self):
         return {
             'id': str(self._id),
-            'created': self._created.isoformat(),
+            'created': self._id.generation_time,
             'title': self._title,
             'text': self._text
         }
@@ -57,7 +50,7 @@ class Feedback(object):
 
     @property
     def created(self):
-        return self._created.isoformat()
+        return self._id.generation_time
 
     def __repr__(self):
         return f'<{self.__class__.__name__!r} id={self._id!r} title={self._title} created={self._created.isoformat()} text={self._text}>'

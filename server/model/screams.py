@@ -10,7 +10,6 @@ class Screams(DatabaseWrapper):
 
     def sanitize_data(self, data):
         return {
-            'created': datetime.datetime.utcnow(),
             'name': data['name'],
             'text': data['text'],
             'user_id': data['user_id'],
@@ -18,20 +17,18 @@ class Screams(DatabaseWrapper):
             'popularity': None
         }
 
-
 class Scream(object):
 
     def __init__(self, scream):
         self._id = scream['_id']
-        self._created = scream['created']
         self._name = scream['name']
         self._text = scream['text']
         self._user_id = scream['user_id']
         self._attachment = scream['attachment']
         self._popularity = scream['popularity']
 
-    def serialize(self, update=False):
-        scream = {
+    def serialize(self):
+        return {
             'name': self._name,
             'text': self._text,
             'user_id': self._user_id,
@@ -39,16 +36,10 @@ class Scream(object):
             'popularity': self._popularity
         }
 
-        if not update:
-            scream['_id'] = self._id
-            scream['created'] = self._created
-
-        return scream
-
-    def get_serialized_data(self):
+    def toJson(self):
         return {
             'id': str(self._id),
-            'created': self._created.isoformat(),
+            'created': self._id.generation_time,
             'name': self._name,
             'text': self._text,
             'attachment': self._attachment,
@@ -70,7 +61,7 @@ class Scream(object):
 
     @property
     def created(self):
-        return self._created.isoformat()
+        return self._id.generation_time
 
     @property
     def user_id(self):

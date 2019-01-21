@@ -21,10 +21,10 @@ class DatabaseWrapper(object):
         raise NotImplementedError
 
     def save(self, obj):
-        self._collection.update_one({'_id': obj._id}, {'$set': obj.serialize(update=True)})
+        self._collection.update_one({'_id': obj._id}, {'$set': obj.serialize()})
 
     def find(self):
-        doc = self._collection.find({}).sort('created', pymongo.DESCENDING)
+        doc = self._collection.find({}).sort('_id', pymongo.DESCENDING)
 
         objs = []
         for obj in doc:

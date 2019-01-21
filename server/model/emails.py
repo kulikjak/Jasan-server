@@ -12,7 +12,7 @@ class Emails(DatabaseWrapper):
         return {
             'source': data['source'],
             'destination': data['destination'],
-            'metadata': data['metadata'],
+            'metadata': data['metadata'] if 'metadata' in data else {},
             'subject': data['subject'],
             'body': data['body']
         }
@@ -28,23 +28,19 @@ class Email(object):
         self._subject = email['subject']
         self._body = email['body']
 
-    def serialize(self, update=False):
-        email = {
+    def serialize(self):
+        return {
             'source': self._source,
             'destination': self._destination,
             'metadata': self._metadata,
             'subject': self._subject,
             'body': self._body
         }
-        if not update:
-            email['_id'] = self._id
 
-        return email
-
-    def get_serialized_data(self):
+    def toJson(self):
         return {
             'id': str(self._id),
-            'created': self._created.isoformat(),
+            'created': self._id.generation_time,
             'source': self._source,
             'destination': self._destination,
             'metadata': self._metadata,
