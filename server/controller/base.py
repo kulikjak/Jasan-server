@@ -66,11 +66,6 @@ def home():
     return flask.render_template('home.html')
 
 
-#@app.route('/void', methods=['GET', 'POST'])
-#def void():
-#    return flask.render_template('void.html')
-
-
 @app.route('/feedback', methods=['GET', 'POST'])
 def feedback():
     if flask.request.method == 'GET':

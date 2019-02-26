@@ -14,7 +14,6 @@ class Users(DatabaseWrapper):
         return {
             'name': data['name'],
             'password': data['password'],
-            'email': data['email'],
             'active': data['active'],
             'admin': data['admin']
         }
@@ -26,7 +25,6 @@ class User(UserMixin):
         self._id = user['_id']
         self._name = user['name']
         self._password = user['password']
-        self._email = user['email']
         self._active = user['active']
         self._admin = user['admin']
 
@@ -34,7 +32,6 @@ class User(UserMixin):
         return {
             'name': self._name,
             'password': self._password,
-            'email': self._email,
             'active': self._active,
             'admin': self._admin
         }
@@ -45,7 +42,6 @@ class User(UserMixin):
             'created': self._id.generation_time,
             'name': self._name,
             'password': self._password,
-            'email': self._email,
             'active': self._active,
             'admin': self._admin
         }
@@ -80,14 +76,6 @@ class User(UserMixin):
     @password.setter
     def password(self, password):
         self._password = password
-    
-    @property
-    def email(self):
-        return self._email
-
-    @email.setter
-    def email(self, email):
-        self._email = email
 
     @property
     def active(self):

@@ -64,7 +64,6 @@ def screambook_delete(scream_id):
 
     # check if this scream belongs to current user
     scream = flask.g.model.screams.find_one(scream_id)
-    print(scream)
     if scream.user_id != user_id or user_id == None:
         flask.flash('Tento výkřik není tvůj!', 'danger')
         return flask.redirect(flask.url_for('screambook'))
