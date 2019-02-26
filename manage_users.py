@@ -109,7 +109,7 @@ def main():
     for opt, value in opts:
         if opt in ("-c", "-d", "-l", "-m"):
             if mode is not None:
-                usage("Only one mode can be selected at the time")
+                usage("Only one operation can be selected at the time")
                 sys.exit(1)
             mode = opt[1:]
         elif opt == "--id":
@@ -133,6 +133,9 @@ def main():
         lists_users(data)
     elif mode == "m":
         modify_user(user_id, data)
+    else:
+        usage("You must specify exactly one operation.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
