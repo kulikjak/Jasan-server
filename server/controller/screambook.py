@@ -78,7 +78,8 @@ def screambook_delete(scream_id):
 def screambook_like(scream_id):
     scream = flask.g.model.screams.find_one(scream_id)
 
-    scream.popularity += 1
+    if scream.popularity <= 99:
+        scream.popularity += 1
     flask.g.model.screams.save(scream)
     return flask.redirect(flask.url_for('screambook.screambook'))
 
@@ -87,7 +88,8 @@ def screambook_like(scream_id):
 def screambook_dislike(scream_id):
     scream = flask.g.model.screams.find_one(scream_id)
 
-    scream.popularity -= 1
+    if scream.popularity >= -99:
+        scream.popularity -= 1
     flask.g.model.screams.save(scream)
     return flask.redirect(flask.url_for('screambook.screambook'))
 
